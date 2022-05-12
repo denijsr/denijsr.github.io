@@ -1,0 +1,1 @@
+Mājaslapa sākas index.html. Mājaslapa ir https://www.bauskaspratnieks.lv/ "uzlabotā versija", ar labāku dizainu un unikāliem papildinājumiem, kā dambretes izloze un interaktīvi uzdevumi (ko nevienā latviskā mājaslapā par dambreti nevar sastapt). Mājaslapa ļoti labi atspoguļo autora spējas izmantot html, css un javascript.

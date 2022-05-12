@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+h1, h2, h3, h4, h5, h6{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+body{
+    margin-bottom: 0;
+}
+
+.h3{
+    margin-top: 7px;
+    margin-bottom: 3px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+.h32{
+    text-align: left;
+    margin-left: 15px;
+    color: white;
+    padding-top: 5px;
+}
+
+.h52{
+    text-align: left;
+    margin-left: 15px;
+    color: white;
+}
+
+body {
+    background-image:url('bg4.png');
+    background-repeat:repeat;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.h1 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.h4{
+    text-align: center;
+}
+
+.header {
+    padding: 5px 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-width: 0 0 1px;
+    background-image:url('bg.png');
+    background-repeat:repeat;
+    z-index: 9999;
+    border-bottom: 1px solid rgb(39, 39, 39);
+}
+
+.nav {
+    padding-top: 24px;
+    text-align: center;
+}
+
+.nav_item {
+    text-decoration: none;
+    margin: 0px 5px; 
+    color: rgb(33, 33, 34);
+    font-size: 25px;
+    font-style: bold;
+    padding-left: 13px;
+    padding-right: 13px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.nav_item3 {
+    text-decoration: none;
+    margin: 0px 13px; 
+    color: rgb(33, 33, 34);
+    font-size: 25px;
+    font-style: bold;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+    white-space: nowrap;
+}
+
+.nav_item:hover {
+    color: rgb(97, 14, 14);
+    transition: color 0.2s;
+}
+
+.nav_item3:hover {
+    color: rgb(97, 14, 14);
+    transition: color 0.2s;
+}
+
+.footer {
+    margin-top: auto;
+    color:black;
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255));
+}
+
+.autors {
+    text-align: center;
+    padding: 10px;
+    color: black;
+    background-color:rgb(255, 255, 255) ;
+}
+
+.logo{
+    text-align: center;
+}
+
+.kontakti{
+    text-align: center;
+}
+
+.main{
+    height: 300px;
+
+}
+
+.main-image{
+    text-align: center;
+    background-color: rgb(38, 50, 56);
+    overflow:hidden;
+    height: 300px;
+    margin-top: 110px;
+}
+
+.main-box-text{
+    height: 100px;
+    background-color: rgb(38, 50, 56);
+    border-top: solid 2px;
+    border-top-color: rgb(255, 255, 255);
+    color: white;
+    padding-left: 20px;
+}
+
+.main-image2{
+    text-align: center;
+    background-color: rgb(38, 50, 56);
+    margin: 0 0 0 0;
+    min-height: 250px;
+    height: auto;
+    overflow:hidden;
+    flex-wrap: wrap;
+}
+
+.frontimage{
+    transition: all 1.5s ease;
+}
+
+.frontimage:hover{
+    transform: scale(1.1);
+}
+
+.news-box{
+    min-height: 400px;
+    height: auto;
+    margin-top: 110px;
+    background-image: url(bg.png);
+}
+
+.news-image{
+    padding-top: 20px;
+    padding-left: 20px;
+    margin-right: 10px;
+}
+
+.news-text-title{
+    vertical-align: top;
+    padding-left: 10px;
+    display: inline-block;
+    padding-top: 50px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
+    font-size: 50px;
+    white-space: pre-wrap;
+    margin: 0 0 0 0;
+}
+
+.news-text-title-date{
+    vertical-align: top;
+    padding-left: 10px;
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 25px;
+    white-space: pre-wrap;
+    margin: 0 0 0 0;
+}
+
+.news-text{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.title{
+    padding-top: 50px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 500;
+    font-size: 50px;
+    margin: 0 0 0 0;
+    text-align: center;
+}
+
+.partner-box{
+    text-align: center;
+    height: auto;
+}
