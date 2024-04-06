@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="styling\logo.jpg">
+    <title>Izloze</title>
+</head>
+<header class="container-center">
+  <div class="">
+      <img src="styling\logo.jpg" class="logo" alt="logo" width="75" height="75">
+  </div>
+  <div class="navdiv" style="width: 100%;">
+      <nav class="nav">
+          <a href="index.html" class="nav_item">
+              Sākumlapa
+          </a>
+          <a href="par mums.html" class="nav_item">
+              Par mums
+          </a>
+          <a href="partneri.html" class="nav_item">
+              Partneri
+          </a>
+          <a href="ziedot.html" class="nav_item">
+              Ziedot
+          </a>
+          <a href="pievienojies.html" class="nav_item">
+              Pievienojies
+          </a>
+          <a href="izloze.html" class="nav_item">
+              Izloze
+          </a>
+      </nav>
+</header>
+  <div style="margin-top: 10px; display: flex; justify-content: center;">
+    <h1>IDF 745 poz. izloze</h1>
+    <button class="butt" onclick="getRandomImage()" style="margin-left: 10px; height: 30px; width: 30px; border: 0; background-color: rgba(255, 255, 255, 0);"><img src="styling/generate.png" alt="" title="Izloze" style="height: 100%; cursor:pointer;"></button>
+    <button class="butt" onclick="rotateImage()" style="margin-left: 10px; height: 30px; width: 30px; border: 0; background-color: rgba(255, 255, 255, 0); margin-right: 5px;"><img src="styling/rotate.png" alt="" title="Apgriezt galdiņu" style="height: 100%; cursor:pointer;"></button>
+  </div>
+  <div style="display: flex; justify-content: center; align-items: center;">
+  <div>
+    <img id="random-image" src="" alt=""/>
+    <p id="image-caption" style="justify-content: center; display: flex; font-size: 19px;"></p>
+  </div>
+</div>
+  <div style="display: flex;">
+    <h2 style="margin-left: 10px;">Vēsture:</h2>
+    <button class="butt" onclick="downloadCaptions()" style="height: 30px; width: 30px; border: 0; background-color: rgba(255, 255, 255, 0); margin-left: 5px; margin-right: 5px;"><img src="styling/download.png" alt="" title="Lejupielādēt vēsturi" style="height: 100%; cursor:pointer;"></button>
+    <button class="butt" onclick="toggleHistory()" id="history-btn" style="height: 30px; width: 30px; border: 0; background-color: rgba(255, 255, 255, 0); margin-left: 5px; margin-right: 5px;">
+      <img id="history-img" src="styling/hide.png?_=<?php echo rand(); ?>" alt="" title="Paslēpt vēsturi" style="height: 100%; cursor:pointer;">
+    </button>      
+  </div>
+  <div id="history"></div>
+  </body>
+</html>
+<script src="script.js"></script>
