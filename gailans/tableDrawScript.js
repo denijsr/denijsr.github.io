@@ -39,9 +39,21 @@ function displayMove() {
   moveDisplay.appendChild(rotateButton); // Append button element to move display
 
   // Apply CSS to center the image and the rotate button
-  imgElement.style.display = "block";
-  imgElement.style.margin = "auto";
-  imgElement.style.marginTop = "10px"; // Adjust as needed for spacing
+// Apply CSS to center the image and the rotate button
+imgElement.style.display = "block";
+imgElement.style.margin = "auto";
+imgElement.style.marginTop = "0px"; // Adjust as needed for spacing
+imgElement.style.maxWidth = "50vw"; // Set maximum width to 80% of viewport width
+imgElement.style.maxHeight = "50vh"; // Set maximum height to 80% of viewport height
+
+rotateButton.style.display = "block";
+rotateButton.style.margin = "auto";
+rotateButton.style.marginTop = "10px"; // Adjust as needed for spacing
+rotateButton.style.border = "none"; // Remove button border
+rotateButton.style.background = "transparent"; // Set background to transparent
+rotateButton.style.width = "20%"; // Set width to 20% of parent element's width
+rotateButton.style.height = "auto"; // Set height to auto to maintain aspect 
+
   rotateButton.style.display = "block";
   rotateButton.style.margin = "auto";
   rotateButton.style.marginTop = "10px"; // Adjust as needed for spacing
