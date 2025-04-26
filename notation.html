@@ -51,6 +51,8 @@
   <button onclick="shortenNotation()">Shorten Notation</button>
   <h3>Output:</h3>
   <textarea id="output" readonly></textarea>
+  <button onclick="copyOutput()">Copy Output</button>
+  <div id="copyMessage" style="text-align: center; color: green; margin-top: 10px; opacity: 0; transition: opacity 0.5s;">Copied!</div>
 </div>
 
 <script>
@@ -62,6 +64,32 @@ function shortenNotation() {
     text = text.replace(/\s+/g, ' ').trim();
 
     document.getElementById('output').value = text;
+}
+
+function copyOutput() {
+    const output = document.getElementById('output');
+    const copyMessage = document.getElementById('copyMessage');
+    
+    output.select();
+    output.setSelectionRange(0, 99999); // For mobile devices
+
+    navigator.clipboard.writeText(output.value)
+      .then(() => {
+          copyMessage.style.opacity = 1;
+          setTimeout(() => {
+              copyMessage.style.opacity = 0;
+          }, 1500); // Fade out after 1.5 seconds
+      })
+      .catch(() => {
+          copyMessage.textContent = 'Failed to copy!';
+          copyMessage.style.color = 'red';
+          copyMessage.style.opacity = 1;
+          setTimeout(() => {
+              copyMessage.style.opacity = 0;
+              copyMessage.style.color = 'green';
+              copyMessage.textContent = 'Copied!';
+          }, 2000);
+      });
 }
 </script>
 
