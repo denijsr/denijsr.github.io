@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Board Editor</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Wrapper that holds the num.png image as background */
+        #board-wrapper {
+            position: relative;
+            width: 460px; /* Scaled down from 512px */
+            height: 460px; /* Scaled down from 512px */
+            background-image: url('num.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* The actual board is positioned in the transparent area of num.png */
+        #board {
+            position: absolute;
+            top: 30px; /* Adjusted to remove the gap */
+            left: 30px; /* Adjusted to remove the gap */
+            width: 400px; /* This is 8x50px, same as the original board size */
+            height: 400px;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            border: 1px solid black; 
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+        }
+
+        .white-square {
+            background-image: url('white-square.png');
+        }
+
+        .black-square {
+            background-image: url('black-square.png');
+            position: relative;
+        }
+
+        .piece {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Checkers Board Editor</h1>
+
+    <!-- Board wrapper with num.png as background -->
+    <div id="board-wrapper">
+        <!-- Actual board placed in the transparent part -->
+        <div id="board"></div>
+    </div>
+
+    <div id="controls">
+        <button onclick="selectPiece('white-checker')">White Checker</button>
+        <button onclick="selectPiece('white-king')">White King</button>
+        <button onclick="selectPiece('black-checker')">Black Checker</button>
+        <button onclick="selectPiece('black-king')">Black King</button>
+        <button onclick="selectPiece(null)">Erase</button>
+        <button onclick="clearBoard()">Clear Board</button>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const boardSize = 8;
+        let selectedPiece = null;
+        let isMouseDown = false;
+
+        // Initialize the board
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+
+                // Add alternating square colors
+                if ((row + col) % 2 === 0) {
+                    square.classList.add('white-square');
+                } else {
+                    square.classList.add('black-square');
+                    square.addEventListener('mousedown', () => placePiece(square));
+                    square.addEventListener('mouseenter', () => {
+                        if (isMouseDown) placePiece(square);
+                    });
+                }
+
+                board.appendChild(square);
+            }
+        }
+
+        // Select the piece to place
+        function selectPiece(piece) {
+            selectedPiece = piece;
+        }
+
+        // Place the selected piece on the board
+        function placePiece(square) {
+            if (!selectedPiece) {
+                square.innerHTML = '';
+                return;
+            }
+            square.innerHTML = '';
+
+            const piece = document.createElement('div');
+            piece.classList.add('piece');
+
+            if (selectedPiece === 'white-checker') {
+                piece.style.backgroundImage = "url('white-checker2.png')";
+            } else if (selectedPiece === 'white-king') {
+                piece.style.backgroundImage = "url('white-king2.png')";
+            } else if (selectedPiece === 'black-checker') {
+                piece.style.backgroundImage = "url('black-checker.png')";
+            } else if (selectedPiece === 'black-king') {
+                piece.style.backgroundImage = "url('black-king5.png')";
+            }
+
+            square.appendChild(piece);
+        }
+
+        // Clear the board
+        function clearBoard() {
+            const squares = document.querySelectorAll('.black-square');
+            squares.forEach(square => {
+                square.innerHTML = '';
+            });
+        }
+
+        // Handle mouse events for drawing
+        document.body.addEventListener('mousedown', () => {
+            isMouseDown = true;
+        });
+
+        document.body.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+
+    </script>
+
+</body>
+
+</html>
