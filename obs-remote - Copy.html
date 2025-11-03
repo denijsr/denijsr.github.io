@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>OBS Remote</title>
+  <script src="https://unpkg.com/obs-websocket-js"></script>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    padding: 2rem;
+  }
+
+  input, button {
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    margin: 0.2rem;
+  }
+
+  input {
+    padding: 0.5rem;
+    width: 50%;
+    background: #1c2128;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+  }
+
+  button {
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .btn-update {
+    background: #238636;
+    color: white;
+  }
+
+  .btn-update:hover {
+    background: #2ea043;
+  }
+
+  .btn-hide {
+    background: #444c56;
+    color: #c9d1d9;
+  }
+
+  .btn-hide:hover {
+    background: #57606a;
+  }
+
+  .btn-arrow {
+    background: #1f6feb;
+    color: white;
+    width: 2rem;
+    height: 2.2rem;
+    padding: 0;
+    font-weight: bold;
+  }
+
+  .btn-arrow:hover {
+    background: #388bfd;
+  }
+
+  .active-scene {
+    background: #1f6feb !important;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  #scenes button {
+    margin-bottom: 0.5rem;
+    background: #30363d;
+    color: white;
+  }
+
+  #scenes button:hover {
+    background: #484f58;
+  }
+
+  h2 {
+    margin-top: 2rem;
+  }
+
+  .text-source {
+    margin-bottom: 1.2rem;
+    border: 1px solid #30363d;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: #161b22;
+  }
+
+  .text-source div {
+    margin-bottom: 0.3rem;
+  }
+
+  #textSourceList h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    color: #8b949e;
+  }
+
+  #textSourceList > div:last-child {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #30363d;
+  }
+
+  .show-hidden-btn {
+    background: #444c56;
+    color: #c9d1d9;
+    margin: 0.2rem 0.4rem 0.2rem 0;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .show-hidden-btn:hover {
+    background: #57606a;
+  }
+
+  /* New scene grouping styles */
+  .scene-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .scene-group {
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-width: 160px;
+    background-color: #202020;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .scene-group h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: #eee;
+    cursor: text;
+  }
+
+  .scene-group h3[contenteditable="true"]:focus {
+    outline: 2px solid #555;
+    background-color: #333;
+  }
+
+  .scene-btn {
+    margin-bottom: 0.5rem;
+    background: #30363d;
+    color: white;
+  }
+
+  .scene-btn:hover {
+    background: #484f58;
+  }
+</style>
+</head>
+
+<body>
+<div id="login">
+  <h2>🔐 Connect to OBS</h2>
+  <input id="ip" placeholder="IP or host (e.g. 127.0.0.1)" />
+  <input id="port" placeholder="Port" value="4455" />
+  <input id="password" type="password" placeholder="Password (optional)" />
+  <button onclick="connectOBS()">Connect</button>
+  <p id="status">Status: Not connected</p>
+</div>
+
+<div id="panel" class="hidden">
+  <h2>🎛️ Scenes</h2>
+  <button onclick="manualRefresh()">🔄 Refresh Panel</button>
+  <div id="scene-groups-container" class="scene-group-container"></div>
+  <button onclick="toggleEditMode()">Toggle Edit Mode</button>
+  <button onclick="addNewGroup()">Add Group</button>
+
+  <h2>📝 Edit Text Sources</h2>
+  <div id="textSourceList"></div>
+
+  <h2>🔗 Linked Text Nodes</h2>
+  <div id="linkedTextContainer"></div>
+  <button onclick="addLinkedNode()">➕ Add Linked Node</button>
+</div>
+
+<script>
+  let obs = null;
+  let currentSceneName = '';
+  let textSources = [];
+  let visibleTextSources = [];
+  let hiddenTextSources = [];
+  let editMode = false;
+let sceneGroups = JSON.parse(localStorage.getItem('sceneGroups')) || {
+  "Group 1": []
+};
+
+let groupSceneMap = {}; // sceneName → groupName
+
+// Rebuild groupSceneMap from saved sceneGroups
+for (const [groupName, scenes] of Object.entries(sceneGroups)) {
+  for (const scene of scenes) {
+    groupSceneMap[scene] = groupName;
+  }
+}
+
+  function toggleEditMode() {
+    editMode = !editMode;
+    renderSceneGroups(Object.keys(groupSceneMap));
+  }
+
+  async function manualRefresh() {
+  if (!obs) return alert("Not connected to OBS.");
+
+  try {
+    await refreshSceneButtons();   // reloads scenes + text source list
+    renderTextSourceUI();          // forces text sources render again
+    renderLinkedTextUI();          // refreshes linked text nodes
+  } catch (e) {
+    alert("Refresh failed: " + e.message);
+  }
+}
+
+
+  function addNewGroup() {
+    let base = "Group ";
+    let num = Object.keys(sceneGroups).length + 1;
+    while (sceneGroups[base + num]) num++;
+    sceneGroups[base + num] = [];
+    saveSceneGroups();
+    renderSceneGroups(Object.keys(groupSceneMap));
+  }
+
+  function saveSceneGroups() {
+    localStorage.setItem('sceneGroups', JSON.stringify(sceneGroups));
+  }
+
+  function renderSceneGroups(scenes) {
+    const container = document.getElementById('scene-groups-container');
+    container.innerHTML = '';
+
+    Object.entries(sceneGroups).forEach(([groupName, sceneList]) => {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'scene-group';
+
+      const title = document.createElement('h3');
+      title.textContent = groupName;
+      title.contentEditable = true;
+      title.addEventListener('blur', () => {
+        const newName = title.textContent.trim();
+        if (newName !== groupName && newName.length > 0) {
+          // Rename group
+          sceneGroups[newName] = [...sceneGroups[groupName]];
+          delete sceneGroups[groupName];
+          sceneGroups[newName].forEach(scene => groupSceneMap[scene] = newName);
+          saveSceneGroups();
+          renderSceneGroups(scenes);
+        }
+      });
+      groupDiv.appendChild(title);
+
+      sceneList.forEach(sceneName => {
+        const btn = document.createElement('button');
+        btn.textContent = sceneName;
+        btn.className = 'scene-btn' + (sceneName === currentSceneName ? ' active-scene' : '');
+        btn.draggable = editMode;
+        btn.addEventListener('click', () => {
+          if (!editMode) {
+            switchScene(sceneName);
+          }
+        });
+        btn.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('text/plain', sceneName);
+        });
+        groupDiv.appendChild(btn);
+      });
+
+      groupDiv.addEventListener('dragover', e => e.preventDefault());
+      groupDiv.addEventListener('drop', e => {
+        const draggedScene = e.dataTransfer.getData('text/plain');
+        const oldGroup = groupSceneMap[draggedScene];
+        if (oldGroup && oldGroup !== groupName) {
+          sceneGroups[oldGroup] = sceneGroups[oldGroup].filter(s => s !== draggedScene);
+          sceneGroups[groupName].push(draggedScene);
+          groupSceneMap[draggedScene] = groupName;
+          saveSceneGroups();
+          renderSceneGroups(scenes);
+        }
+      });
+
+      container.appendChild(groupDiv);
+    });
+  }
+
+function assignScenesToGroups(scenes) {
+  for (const s of scenes) {
+    if (!groupSceneMap[s]) {
+      // Avoid re-adding duplicates
+      if (!sceneGroups["Group 1"].includes(s)) {
+        sceneGroups["Group 1"].push(s);
+      }
+      groupSceneMap[s] = "Group 1";
+    }
+  }
+  saveSceneGroups();
+  renderSceneGroups(scenes);
+}
+
+
+
+  function loadLinkedNodes() {
+    return JSON.parse(localStorage.getItem('linkedNodes') || '[]');
+  }
+
+  function saveLinkedNodes(nodes) {
+    localStorage.setItem('linkedNodes', JSON.stringify(nodes));
+  }
+
+  function renderLinkedTextUI() {
+    const container = document.getElementById('linkedTextContainer');
+    container.innerHTML = '';
+
+    const nodes = loadLinkedNodes();
+
+    nodes.forEach((node, i) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'text-source';
+
+      const label = document.createElement('div');
+      label.textContent = `🪢 ${node.name || 'Linked Node #' + (i + 1)}`;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Enter text...';
+      input.style.width = '50%';
+
+      const updateBtn = document.createElement('button');
+      updateBtn.textContent = 'Update All';
+      updateBtn.onclick = () => {
+        node.targets.forEach(target => {
+          updateText(target, input.value);
+        });
+      };
+
+      const targetsInput = document.createElement('input');
+      targetsInput.type = 'text';
+      targetsInput.placeholder = 'Comma-separated OBS sources (e.g. Clock1, Clock2)';
+      targetsInput.value = node.targets.join(', ');
+      targetsInput.style.width = '50%';
+      targetsInput.onchange = () => {
+        node.targets = targetsInput.value.split(',').map(n => n.trim()).filter(Boolean);
+        saveLinkedNodes(nodes);
+      };
+
+      const renameInput = document.createElement('input');
+      renameInput.type = 'text';
+      renameInput.placeholder = 'Name this node';
+      renameInput.value = node.name || '';
+      renameInput.onchange = () => {
+        node.name = renameInput.value;
+        saveLinkedNodes(nodes);
+        renderLinkedTextUI();
+      };
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '❌ Remove';
+      delBtn.onclick = () => {
+        nodes.splice(i, 1);
+        saveLinkedNodes(nodes);
+        renderLinkedTextUI();
+      };
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(renameInput);
+      wrapper.appendChild(input);
+      wrapper.appendChild(updateBtn);
+      wrapper.appendChild(targetsInput);
+      wrapper.appendChild(delBtn);
+
+      container.appendChild(wrapper);
+    });
+  }
+
+  function addLinkedNode() {
+    const nodes = loadLinkedNodes();
+    nodes.push({ name: '', targets: [] });
+    saveLinkedNodes(nodes);
+    renderLinkedTextUI();
+  }
+
+  async function connectOBS() {
+    const ip = document.getElementById('ip').value.trim();
+    const port = document.getElementById('port').value.trim();
+    const pass = document.getElementById('password').value;
+    const fullUrl = ip.startsWith('ws://') || ip.startsWith('wss://')
+      ? ip
+      : `ws://${ip}:${port}`;
+
+    obs = new OBSWebSocket();
+
+    try {
+      await obs.connect(fullUrl, pass || undefined);
+      document.getElementById('status').textContent = '✅ Connected!';
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('panel').classList.remove('hidden');
+
+      await refreshSceneButtons();
+      renderTextSourceUI();     
+      renderLinkedTextUI();
+    } catch (err) {
+      document.getElementById('status').textContent = '❌ Connection failed: ' + err.message;
+    }
+  }
+
+  async function refreshSceneButtons() {
+    const res = await obs.call('GetSceneList');
+    const current = await obs.call('GetCurrentProgramScene');
+    currentSceneName = current.currentProgramSceneName;
+
+    const scenes = res.scenes.map(s => s.sceneName);
+    assignScenesToGroups(scenes);
+    renderSceneGroups(scenes);
+
+    await listTextSources();
+  }
+
+  async function switchScene(sceneName) {
+    await obs.call('SetCurrentProgramScene', { sceneName });
+    currentSceneName = sceneName;
+    await refreshSceneButtons();
+  }
+
+  async function listTextSources() {
+    const scenesRes = await obs.call('GetSceneList');
+    const foundSources = new Map();
+
+    for (const scene of scenesRes.scenes) {
+      const itemsRes = await obs.call('GetSceneItemList', {
+        sceneName: scene.sceneName
+      });
+
+      for (const item of itemsRes.sceneItems) {
+        try {
+          const input = await obs.call('GetInputSettings', {
+            inputName: item.sourceName
+          });
+
+          const kind = input.inputKind;
+          if (kind.startsWith('text_') && !foundSources.has(item.sourceName)) {
+            const currentText = input.inputSettings.text || '';
+            foundSources.set(item.sourceName, currentText);
+          }
+        } catch (e) {
+          // Skip non-inputs or nested groups
+        }
+      }
+    }
+
+    const allSources = Array.from(foundSources.entries());
+    const prefs = loadTextSourcePrefs();
+
+    // Reconstruct visibleTextSources using saved order
+    const savedNames = prefs.visible.map(([name]) => name);
+    const orderedVisible = [];
+    const used = new Set();
+
+    for (const [name, value] of prefs.visible) {
+      if (foundSources.has(name)) {
+        orderedVisible.push([name, foundSources.get(name)]);
+        used.add(name);
+      }
+    }
+
+    // Add any new sources that weren't in saved order
+    for (const [name, value] of allSources) {
+      if (!used.has(name) && !prefs.hidden.includes(name)) {
+        orderedVisible.push([name, value]);
+      }
+    }
+
+    visibleTextSources = orderedVisible;
+    hiddenTextSources = prefs.hidden.filter(h => allSources.find(([name]) => name === h));
+    textSources = allSources;
+
+    renderTextSourceUI();
+  }
+
+  function renderTextSourceUI() {
+    const container = document.getElementById('textSourceList');
+    container.innerHTML = '';
+
+    if (textSources.length === 0) {
+      container.textContent = 'No text sources found.';
+      return;
+    }
+
+    visibleTextSources.forEach(([name, value], i) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'text-source';
+
+      const label = document.createElement('div');
+      label.textContent = `🔤 ${name}`;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = value;
+      input.style.width = '50%';
+
+      const updateBtn = document.createElement('button');
+      updateBtn.textContent = 'Update';
+      updateBtn.className = 'btn-update';
+      updateBtn.onclick = () => updateText(name, input.value);
+
+      const hideBtn = document.createElement('button');
+      hideBtn.textContent = 'Hide';
+      hideBtn.className = 'btn-hide';
+      hideBtn.onclick = () => {
+        hiddenTextSources.push(name);
+        visibleTextSources.splice(i, 1);
+        saveTextSourcePrefs(visibleTextSources, hiddenTextSources);
+        renderTextSourceUI();
+        renderLinkedTextUI();
+      };
+
+      const upBtn = document.createElement('button');
+      upBtn.textContent = '⬆';
+      upBtn.className = 'btn-arrow';
+      upBtn.onclick = () => {
+        if (i > 0) {
+          [visibleTextSources[i], visibleTextSources[i - 1]] = [visibleTextSources[i - 1], visibleTextSources[i]];
+          saveTextSourcePrefs(visibleTextSources, hiddenTextSources);
+          renderTextSourceUI();
+        }
+      };
+
+      const downBtn = document.createElement('button');
+      downBtn.textContent = '⬇';
+      downBtn.className = 'btn-arrow';
+      downBtn.onclick = () => {
+        if (i < visibleTextSources.length - 1) {
+          [visibleTextSources[i], visibleTextSources[i + 1]] = [visibleTextSources[i + 1], visibleTextSources[i]];
+          saveTextSourcePrefs(visibleTextSources, hiddenTextSources);
+          renderTextSourceUI();
+        }
+      };
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(input);
+      wrapper.appendChild(updateBtn);
+      wrapper.appendChild(hideBtn);
+      wrapper.appendChild(upBtn);
+      wrapper.appendChild(downBtn);
+      container.appendChild(wrapper);
+    });
+
+    if (hiddenTextSources.length > 0) {
+      const hiddenWrap = document.createElement('div');
+      hiddenWrap.innerHTML = `<h3>🙈 Hidden Text Sources</h3>`;
+
+      hiddenTextSources.forEach(name => {
+        const btn = document.createElement('button');
+        btn.textContent = `Show ${name}`;
+        btn.onclick = () => {
+          visibleTextSources.push([name, '']);
+          hiddenTextSources = hiddenTextSources.filter(n => n !== name);
+          saveTextSourcePrefs(visibleTextSources, hiddenTextSources);
+          renderTextSourceUI();
+        };
+        btn.className = 'show-hidden-btn';
+        hiddenWrap.appendChild(btn);
+      });
+
+      container.appendChild(hiddenWrap);
+    }
+  }
+
+  async function updateText(sourceName, newText) {
+    // Also update local visibleTextSources value
+    const idx = visibleTextSources.findIndex(([n]) => n === sourceName);
+    if (idx !== -1) {
+      visibleTextSources[idx][1] = newText;
+      saveTextSourcePrefs(visibleTextSources, hiddenTextSources);
+    }
+    try {
+      await obs.call('SetInputSettings', {
+        inputName: sourceName,
+        inputSettings: { text: newText },
+        overlay: true
+      });
+    } catch (e) {
+      alert(`Failed to update "${sourceName}": ${e.message}`);
+    }
+  }
+
+  function loadTextSourcePrefs() {
+    const visible = JSON.parse(localStorage.getItem('visibleTextSources') || '[]')
+      .filter(entry => Array.isArray(entry) && entry.length === 2);
+    const hidden = JSON.parse(localStorage.getItem('hiddenTextSources') || '[]');
+    return { visible, hidden };
+  }
+
+  function saveTextSourcePrefs(visible, hidden) {
+    localStorage.setItem('visibleTextSources', JSON.stringify(visible.map(([name, value]) => [name, value])));
+    localStorage.setItem('hiddenTextSources', JSON.stringify(hidden));
+  }
+</script>
+</body>
+</html>
