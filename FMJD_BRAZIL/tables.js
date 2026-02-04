@@ -16,3 +16,22 @@ const menTableBrazilian = {
     15: ["ab4 bc5 ba5 cb4 gh4",	"cb4 bc5 bc3 fg5 ed4",	"cb4 fg5 ed4 gf4",	"NEW DRAW",	"cd4 hg5 gf4 gh4 fg5 dc5",	"ed4 de5 ab4 cd6",	"ef4 ba5 fe3 ab6 gf2 fg5",	"ef4 fg5 fe3 gh4 gf2 ba5",	"gh4 ba5 fg3 hg5 gf2",	"gh4 fg5 hf6 eg5 ed4",	"a1-b4 h6-g5",	"a3-a5 b6-a3",	"a3-d4 b6-a3",	"a3-g5 d6-a3",	"a3-h4 c7-a5",	"b2-d4 b6-c5",	"c1-a5 a7-c5",	"c3-d4 h6-e5",	"c3-h4 ---",	"d2-b4 h8-g5",	"d2-f4 d6-a5",	"e3-a5 e7-g5",	"e3-d4 a7-e5",	"f2-a5 e7-e5",	"f2-g5 h6-a5",	"g3-a5 ---",	"g3-d4 d6-e5",	"h2-a5 a7-g5",	"h2-c5 b6-h2",	"h2-f4 c7-h2",	"--- h6-h4",	"cd4 dc5 dc3 hg5",	"gf4 fe5 cd4 eg3",	"a3-h4 b6-c5",	"c3-d4 d6-a5",	"e3-h4 f6-a5",	"h2-b4 g7-h2"],
     16: ["ab4 dc5 bd6 ec5 gh4",	"cb4 bc5 dc3 ab6",	"cb4 hg5 ba5 gh4 ed4",	"cd4 bc5 db6 ac5 bc3 de5",	"cd4 hg5 gf4 gh4 fg5 de5",	"ed4 de5 ab4 ed6",	"ef4 ba5 fe3 fe5 cd4",	"ef4 fg5 fe3 gh4 gf2 de5",	"gh4 ba5 hg3 fe5 ed4",	"gh4 hg5 ef4 ge3 df4 ba5",	"a1-d4 a7-c5",	"a3-a5 d6-b4",	"a3-d4 e7-c5",	"a3-g5 d6-c5",	"a3-h4 a7-c5",	"b2-d4 f6-c5",	"c1-a5 f8-h4",	"c3-e5 g7-a5",	"c3-h4 a7-g5",	"d2-b4 h8-h4",	"d2-f4 e7-a5",	"e3-a5 f6-b4",	"e3-d4 a7-g5",	"f2-a5 f6-e5",	"f2-g5 h6-c5",	"g3-a5 a7-e5",	"g3-d4 g7-a5",	"h2-a5 a7-h2",	"h2-c5 d6-h2",	"NEW DRAW",	"--- h8-h4",	"NEW DRAW",	"gf4 fe5 ed4 eg3 hf4 ba5",	"a3-h4 d6-c5",	"c3-e5 b6-a5",	"f2-b4 d6-a5",	"h2-b4 h8-h2"],
 }
+
+const womenTableBrazilian = {
+    1: ["ab4",	"ab4 fe5 ba5 ef4",	"cb4 de5 gf4",	"cd4",	"cd4 de5 bc3 ed6 ef4 fe7",	"cd4 fg5 gh4 dc5",	"ed4 fe5",	"gf4 bc5 hg3 fe5 cd4",	"gh4 dc5"],
+    2: ["ab4 ba5",	"ab4 fe5 ba5 gf6",	"cb4 de5 gf4 eg3 hf4 fe5",	"cd4 ba5 bc3",	"cd4 de5 bc3 ed6 gf4",	"cd4 fg5 gh4 ba5",	"ed4 fg5",	"gf4 dc5",	"gh4 dc5 ef4 cd6"],
+    3: ["ab4 ba5 ba3 ab6",	"ab4 fe5 ef4",	"cb4 fe5 ba5 bc5",	"cd4 ba5 bc3 ab6",	"cd4 de5 dc3",	"cd4 hg5",	"ed4 fg5 gh4 dc5",	"gf4 dc5 cb4 ed6",	"gh4 de5"],
+    4: ["ab4 ba5 ba3 ab6 ab2 de5",	"ab4 fg5",	"cb4 fe5 bc3 gf6 gh4 hg7",	"cd4 ba5 bc3 ab6 ab2 dc5",	"cd4 de5 gf4 ec3",	"cd4 hg5 gf4 gh4 fe5",	"ed4 hg5",	"gf4 fe5",	"gh4 de5 fg3"],
+    5: ["ab4 ba5 ba3 cb6 ab2 bc5",	"ab4 fg5 bc5 db4",	"cb4 fe5 ef4 ba5",	"cd4 ba5 bc3 de5 ef4",	"cd4 de5 gf4 eg3",	"ed4",	"ed4 hg5 cb4 de5",	"gf4 fe5 fg3",	"gh4 fe5"],
+    6: ["ab4 ba5 ba3 cb6 gf4",	"ab4 hg5",	"cb4 fe5 ef4 ba5 bc5",	"cd4 ba5 bc3 de5 gf4",	"cd4 fe5",	"ed4 ba5",	"ef4",	"gf4 fe5 hg3 bc5 cb4 ab6",	"gh4 fe5 ab4 ed4"],
+    7: ["ab4 ba5 ba3 de5",	"ab4 hg5 gf4 bc5",	"cb4 fe5 ef4 gf6 bc3",	"cd4 ba5 bc3 hg5 cb2 gf4",	"cd4 fe5 df6 eg5 gf4 de7",	"ed4 ba5 dc5 db4 ac5 fg5",	"ef4 bc5 cb4 fg5 de3",	"gf4 fe5 hg3 ed4 ec5",	"gh4 fe5 cb4 ef4"],
+    8: ["ab4 ba5 ed4 dc5",	"cb4",	"cb4 fe5 ef4 gf6 de3 bc5",	"cd4 ba5 de5 df4",	"cd4 fg5 bc3 ef6",	"ed4 bc5",	"ef4 fg5",	"gf4 fe5 hg3 gf6 cb4",	"gh4 fe5 ed4 bc5"],
+    9: ["ab4 ba5 ed4 fe5 df6 ge5",	"cb4 ba5 bc5 db4 ac5 cb6",	"cb4 fe5 gh4 ba5 hg5",	"cd4 ba5 ef4 de5",	"cd4 fg5 bc3 gf6 ab2 gh4",	"ed4 bc5 db6 ac5 de3 hg5",	"ef4 fg5 cb4 ge3 df4 ef6",	"gf4 fe5 hg3 gf6 ed4",	"gh4 fe5 ed4 ef6"],
+    10: ["ab4 ba5 ed4 fg5",	"cb4 ba5 bc5 db4 ac5 fe5",	"cb4 fe5 gh4 bc5 hg5",	"cd4 bc5",	"cd4 fg5 bc3 gf4",	"ed4 bc5 db6 ac5 gf4 fe5",	"gf4",	"gf4 fg5 cb4 de5",	"gh4 fe5 ed4 gf6"],
+    11: ["ab4 ba5 ed4 hg5",	"cb4 ba5 gf4",	"cb4 fg5 ed4 ba5",	"cd4 bc5 db6 ac5 bc3 fe5",	"cd4 fg5 bc3 gh4 cb4 de5",	"ed4 bc5 db6 ac5 gh4 de5",	"gf4 ba5",	"gf4 fg5 cb4 gf6 bc3 de5",	"gh4 fe5 ed4 gf6 fg3 dc5"],
+    12: ["ab4 ba5 gh4 fg5",	"cb4 bc5",	"cb4 fg5 ed4 dc5",	"cd4 dc5 bc3 cd6",	"cd4 fg5 bc3 gh4 cb4 hg5",	"ed4 dc5 fe3 cd6",	"gf4 ba5 cb4 ac3 bd4 fg5",	"gh4",	"gh4 fe5 fg3"],
+    13: ["ab4 bc5",	"cb4 bc5 bc3 fg5 cd4 ab6",	"cb4 hg5",	"cd4 dc5 bc3 hg5",	"cd4 fg5 dc5",	"ed4 dc5 fe3 fg5",	"gf4 ba5 cb4 ac3 db4 de5",	"gh4 ba5",	"gh4 fg5"],
+    14: ["ab4 bc5 ba5 fg5",	"cb4 de5",	"cb4 hg5 ed4",	"cd4 dc5 bc3 fg5 cb4 ba5",	"cd4 fg5 bc3",	"ed4 de5",	"gf4 ba5 cb4 ac3 db4 fg5",	"gh4 ba5 hg3 ab6 ef4 dc5",	"gh4 hg5 cd4 dc5"],
+    15: ["ab4 de5 gh4",	"cb4 de5 ba5 bc5",	"cb4 hg5 gh4 gh6 bc5",	"cd4 dc5 dc3 ed6 cb4 fg5",	"cd4 fg5 gf4 gf6 bc3 gh4",	"ed4 de5 de3 ed6",	"gf4 ba5 hg3 fg5",	"gh4 ba5 hg3 ab6 gh2 ba7",	"gh4 hg5 cd4 gh6 fg3"],
+    16: ["ab4 fe5",	"cb4 de5 ef4 ba5",	"cb4 hg5 gh4 gh6 hg3",	"cd4 de5",	"cd4 fg5 gh4 ba5",	"ed4 de5 fe3",	"gf4 bc5 hg3 ab6 gh4 ba5",	"gh4 bc5",	"gh4 hg5 hg3 de5"],
+}
