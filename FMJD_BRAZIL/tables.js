@@ -35,3 +35,5 @@ const womenTableBrazilian = {
     15: ["ab4 de5 gh4",	"cb4 de5 ba5 bc5",	"cb4 hg5 gh4 gh6 bc5",	"cd4 dc5 dc3 ed6 cb4 fg5",	"cd4 fg5 gf4 gf6 bc3 gh4",	"ed4 de5 de3 ed6",	"gf4 ba5 hg3 fg5",	"gh4 ba5 hg3 ab6 gh2 ba7",	"gh4 hg5 cd4 gh6 fg3"],
     16: ["ab4 fe5",	"cb4 de5 ef4 ba5",	"cb4 hg5 gh4 gh6 hg3",	"cd4 de5",	"cd4 fg5 gh4 ba5",	"ed4 de5 fe3",	"gf4 bc5 hg3 ab6 gh4 ba5",	"gh4 bc5",	"gh4 hg5 hg3 de5"],
 }
+
+// where women table lol
